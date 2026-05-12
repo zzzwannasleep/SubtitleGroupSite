@@ -6,6 +6,7 @@
 - 目标：定义一个基于 `Nuxt Content` 的内容站与下载站一体化方案
 - 适用阶段：产品规划、UI 设计、工程初始化、开发拆分、部署决策
 - 当前结论：采用 `Nuxt 4 + Nuxt Content`，主部署方式聚焦 `Cloudflare Workers` 与 `本地部署（Node/Nitro）`
+- 补充规格入口：`specs/README.md`
 
 ## 2. 项目概述
 
@@ -988,3 +989,14 @@ lib/
 - 本地部署模式下，一个下载文件可以直接读取单机目录，并展示 `local + R2 + GitHub + OSS + WebDAV` 下载链接
 - Workers 与本地部署可以复用同一套核心内容结构、评论接口与下载抽象
 - 不依赖自动同步到 `R2` 也能完成两种模式的正常运行
+
+## 21. 补充 SPEC 清单
+
+建议以本文件作为总纲，再配套以下补充规格：
+
+- `specs/AUTH-COMMENT-SPEC.md`
+  - 细化 `GitHub OAuth`、`Telegram Login`、会话策略、评论权限、审核与风控
+- `specs/CONTENT-SCHEMA-SPEC.md`
+  - 细化文章与下载条目的 frontmatter、文件结构、下载链接字段与校验规则
+- `specs/SEARCH-SPEC.md`
+  - 细化站内搜索索引来源、排序规则、分页协议、API 与前端行为
