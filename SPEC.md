@@ -19,7 +19,7 @@
 
 - 支持基于 Markdown 的文章发布、分类、标签、归档和 SEO。
 - 支持文章详情页挂载评论系统。
-- 支持下载资源展示、版本说明、镜像源切换、文件元信息展示。
+- 支持下载资源展示、版本说明、直接下载链接展示、文件元信息展示。
 - 支持统一管理下载源，并按阶段演进：
   - `R2` 对象存储
   - `GitHub` 普通仓库文件
@@ -37,6 +37,8 @@
 
 - 第一阶段不实现复杂的多角色后台权限系统。
 - 第一阶段不做在线文件上传面板。
+- 第一阶段不做邮箱/密码注册登录。
+- 第一阶段不做找回密码与重置密码流程。
 - 第一阶段不做支付、会员、限时下载等商业化能力。
 - 第一阶段不做复杂的对象存储生命周期自动编排。
 - 第一阶段不做分布式转码、断点续传客户端等重型下载能力。
@@ -47,7 +49,7 @@
 ### 4.1 用户角色
 
 - 访客：浏览文章、查看下载详情、下载资源。
-- 注册用户：登录后发表评论、举报评论、管理自己的评论。
+- 登录用户：通过第三方账号登录后发表评论、举报评论。
 - 站点维护者：发布文章、维护下载元数据、调整页面内容与样式。
 - 管理员：管理配置、评论接入参数、下载源配置、部署环境变量。
 
@@ -100,7 +102,8 @@
 - 未登录用户只能浏览评论，不能直接提交评论
 - 第一阶段采用单层评论，不做楼中楼回复
 - 第一阶段评论内容使用纯文本，不开放富文本或 Markdown
-- 注册、登录、发表评论时接入 `Cloudflare Turnstile`
+- 首期支持 `GitHub` 与 `Telegram` 第三方登录
+- 评论提交时接入 `Cloudflare Turnstile`
 - 评论提交前必须在服务端校验 Turnstile token
 - 对 `/api/auth/*` 与 `/api/comments/*` 接口启用频率限制
 - 优先结合 `Cloudflare WAF / Rate Limiting` 规则做外围防刷
@@ -111,14 +114,13 @@
   - `spam`
 - 支持管理员审核、删除、封禁用户、标记垃圾评论
 - 支持用户举报评论
-- 支持用户删除自己的评论
 
 第一阶段推荐实现方式：
 
 - `Cloudflare Workers` 模式下：
   - 使用 `Cloudflare D1` 保存用户、会话、评论、审核记录
   - 使用 `Cloudflare Turnstile` 负责人机验证
-  - 使用 Workers API 处理注册、登录、评论提交、审核接口
+  - 使用 Workers API 处理第三方登录回调、会话、评论提交、审核接口
 - 本地部署模式下：
   - 复用相同的评论接口和数据模型
   - 优先使用 `SQLite` 兼容同一套 schema
@@ -126,8 +128,7 @@
 
 推荐反垃圾策略：
 
-- 注册和登录时使用 Turnstile
-- 评论提交时再次使用 Turnstile
+- 评论提交时使用 Turnstile
 - 同一 IP、同一账号、同一文章在短时间内限制发言频率
 - 支持注入可配置的黑名单词列表，命中后直接拒绝、标记 `spam` 或转入待审
 - 对高频外链、敏感词、重复内容做基础拦截或待审
@@ -135,7 +136,8 @@
 认证方式建议：
 
 - 第一阶段以“站内登录后评论”为硬要求
-- 首期登录方式固定为 `邮箱/密码注册登录`
+- 首期登录方式固定为 `GitHub` 与 `Telegram` 第三方登录
+- 第一阶段不实现邮箱/密码注册登录，也不实现找回密码/重置密码
 - 评论提交都必须经过 Turnstile 与服务端校验
 
 ### 5.3 下载中心
@@ -147,14 +149,14 @@
 - 文件元数据展示
 - 多版本展示
 - 多平台文件展示
-- 多下载源展示
-- 直接展示全部已启用下载源
+- 多下载链接展示
+- 直接展示全部已启用下载链接
 - 关联说明文档或教程文章
 
 第一阶段默认能力：
 
-- 展示 `R2`、`GitHub` 普通仓库文件、`OSS`、`WebDAV` 下载源
-- 在 `Cloudflare Workers` 模式下完成下载来源聚合与直接展示
+- 展示 `R2`、`GitHub` 普通仓库文件、`OSS`、`WebDAV` 直链
+- 在 `Cloudflare Workers` 模式下直接读取并展示下载链接
 - 在本地部署模式下正式支持 `local` 单机目录来源
 
 明确不做：
@@ -174,6 +176,7 @@
 - 搜索入口在桌面端与移动端都可直接访问
 - 搜索结果需能区分文章结果与下载结果
 - 结果排序优先考虑标题命中与精确匹配
+- 搜索结果必须支持分页
 - 空结果状态与基础关键词高亮应可用
 
 ### 5.5 页面定制
@@ -217,6 +220,7 @@
 - 内容系统：`Nuxt Content`
 - 运行时服务：`Nitro server/api`
 - 评论系统：自建评论模块
+- 第三方认证：`GitHub OAuth` + `Telegram Login`
 - 评论数据库：
   - Workers 模式：`Cloudflare D1`
   - 本地部署模式：`SQLite` 优先
@@ -232,7 +236,7 @@
 
 - 适合 Git-based 内容管理
 - 可以用内容集合严格约束文章与下载数据结构
-- 具备服务端 API 能力，适合在 `Workers` 与本地部署两种模式下统一处理多下载源
+- 具备服务端 API 能力，适合在 `Workers` 与本地部署两种模式下统一处理下载条目、第三方登录与评论能力
 - 页面自由度比文档站框架更高
 - 后续接入 `Nuxt Studio` 成本较低
 
@@ -246,7 +250,7 @@
 
 - 公网主站默认方案
 - 边缘运行时方案
-- 适合 `R2`、`GitHub Repo`、`OSS`、`WebDAV` 等远程来源聚合、搜索、统计与轻量 API
+- 适合 `R2`、`GitHub Repo`、`OSS`、`WebDAV` 直链展示、搜索、统计与轻量 API
 
 核心优势：
 
@@ -262,8 +266,8 @@
 默认建议：
 
 - 作为公开站点的首选生产部署
-- 下载主源优先使用 `R2`
-- `GitHub Repo`、`OSS`、`WebDAV` 作为补充来源
+- 下载主链优先使用 `R2`
+- `GitHub Repo`、`OSS`、`WebDAV` 作为补充直链
 
 #### 主模式 B：本地部署（Node/Nitro）
 
@@ -298,9 +302,9 @@
 
 - 文章发布
 - 站内搜索
-- 下载来源聚合 API
+- 下载条目 API
 - 运行时统计
-- `R2` / `GitHub Repo` / `OSS` / `WebDAV` 远程来源展示
+- `R2` / `GitHub Repo` / `OSS` / `WebDAV` 下载直链展示
 - 登录后评论
 - Turnstile 人机验证
 
@@ -315,9 +319,9 @@
 
 - 文章发布
 - 站内搜索
-- 下载来源聚合 API
+- 下载条目 API
 - 本地单机目录读取
-- 统一聚合 `local + R2 + GitHub + OSS + WebDAV`
+- 统一展示 `local + R2 + GitHub + OSS + WebDAV`
 - 登录后评论与管理
 
 限制：
@@ -350,7 +354,7 @@
 - 可将静态资源与 Worker 逻辑一起部署
 - 官方自动配置会将入口指向 `.output/server/index.mjs`，静态资源目录指向 `.output/public`
 - API 路由应集中在 `/api/*`，避免与静态资源路由职责混淆
-- 下载来源聚合、搜索、统计等能力优先走 `/api/*` 路由
+- 搜索、登录会话、评论、下载条目等能力优先走 `/api/*` 路由
 - `R2`、`D1`、KV 等能力应通过 Cloudflare bindings 管理，而不是写死在前端配置中
 
 #### 本地部署（Node/Nitro）
@@ -421,6 +425,10 @@ Browser
 - `R2_ACCESS_KEY_ID`
 - `R2_SECRET_ACCESS_KEY`
 - `GITHUB_TOKEN`
+- `GITHUB_OAUTH_CLIENT_ID`
+- `GITHUB_OAUTH_CLIENT_SECRET`
+- `TELEGRAM_BOT_TOKEN`
+- `TELEGRAM_BOT_NAME`
 - `OSS_PUBLIC_BASE_URL`
 - `WEBDAV_BASE_URL`
 - `WEBDAV_USERNAME`
@@ -449,28 +457,28 @@ Browser
 ### 8.1 设计原则
 
 - 页面层不直接感知具体存储实现。
-- 所有下载资源统一抽象为“文件 + 来源列表”。
-- 每个文件可以有多个镜像源。
-- 所有已启用来源直接展示给用户。
+- 所有下载资源统一抽象为“文件 + 下载链接列表”。
+- 每个文件可以配置多个下载链接。
+- 所有已启用下载链接直接展示给用户。
 - 第一阶段以“按配置展示全部来源”为主，不做容灾和自动切换。
-- 来源排序仅用于展示顺序与默认按钮，不代表健康检查或自动回退。
+- 链接排序仅用于展示顺序，不代表健康检查或自动回退。
 - 用户应可以看到至少一个可直接使用的下载地址。
 
 ### 8.2 支持的来源类型
 
 #### `r2`
 
-适合做第一阶段主下载源。推荐使用公共桶 + 自定义域名，或其他可直接访问的公开 URL。
+适合做第一阶段主下载链接。推荐使用公共桶 + 自定义域名，或其他可直接访问的公开 URL。
 
 第一阶段不强依赖短时签名或防盗链。
 
 #### `github_repo`
 
-作为第一阶段主要 GitHub 来源类型。适合普通仓库文件、随仓库版本更新的资源。
+作为第一阶段主要 GitHub 链接类型。适合普通仓库文件、随仓库版本更新的资源。
 
 #### `oss`
 
-适合接入阿里云 OSS 或兼容对象存储的公开文件地址，可作为 Workers 模式下的补充远程来源。
+适合接入阿里云 OSS 或兼容对象存储的公开文件地址，可作为 Workers 模式下的补充下载链接。
 
 #### `webdav`
 
@@ -478,15 +486,15 @@ Browser
 
 #### `github_release`
 
-作为可选兼容来源，适合少量稳定版打包资产，但不是首期主路径。
+作为可选兼容链接类型，适合少量稳定版打包资产，但不是首期主路径。
 
 #### `local`
 
-这是本地部署模式下的正式来源类型，对应单机目录文件。`Cloudflare Workers` 模式下不直接读取 `local`，如需在公网侧可见，应改挂为 `webdav`、`oss` 或其他远程来源。
+这是本地部署模式下的正式链接类型，对应单机目录文件。`Cloudflare Workers` 模式下不直接读取 `local`，如需在公网侧可见，应改挂为 `webdav`、`oss` 或其他远程链接。
 
-### 8.3 来源展示顺序
+### 8.3 下载链接展示顺序
 
-不同部署模式使用不同的默认展示顺序，页面会直接展示全部已启用来源。
+不同部署模式使用不同的默认展示顺序，页面会直接展示全部已启用下载链接。
 
 #### Workers 模式默认展示顺序
 
@@ -498,9 +506,9 @@ Browser
 
 说明：
 
-- `R2` 是公网主源
-- 其余远程来源作为补充显示
-- 不做自动选源、健康切换、故障回退
+- `R2` 是公网主链
+- 其余远程链接作为补充显示
+- 不做自动选链、健康切换、故障回退
 
 #### 本地部署模式默认展示顺序
 
@@ -514,7 +522,7 @@ Browser
 说明：
 
 - 本地部署优先使用单机目录
-- `R2` 与其他远程来源可作为补充来源同时展示
+- `R2` 与其他远程链接可作为补充链接同时展示
 - 不要求把本地文件自动同步到 `R2`
 
 ### 8.4 阶段划分
@@ -526,13 +534,13 @@ Browser
 - 支持 `GitHub Repo`
 - 支持 `OSS`
 - 支持 `WebDAV`
-- 提供下载来源聚合 API 与来源直出展示
+- 提供下载条目 API 与下载链接直出展示
 
 #### 第二阶段
 
 - 完成本地部署（Node/Nitro）主流程
 - 支持 `local` 单机目录文件源
-- 复用相同下载数据结构与来源抽象
+- 复用相同下载数据结构与链接抽象
 - 打通 `local + R2 + GitHub + OSS + WebDAV` 的统一展示逻辑
 
 ## 9. 数据模型
@@ -585,20 +593,24 @@ versions:
         platform: windows
         arch: x64
         size: 104857600
-        sources:
+        links:
           - type: r2
-            key: releases/tool-a/1.0.0/tool-a-win-x64.zip
+            label: R2
+            url: https://dl.example.com/releases/tool-a/1.0.0/tool-a-win-x64.zip
             order: 100
           - type: github_repo
+            label: GitHub
             owner: example
             repo: tool-a-assets
             ref: main
             path: releases/tool-a/1.0.0/tool-a-win-x64.zip
             order: 80
           - type: oss
+            label: OSS
             url: https://oss.example.com/tool-a/1.0.0/tool-a-win-x64.zip
             order: 60
           - type: webdav
+            label: WebDAV
             url: https://dav.example.com/downloads/tool-a/1.0.0/tool-a-win-x64.zip
             order: 40
 ```
@@ -610,9 +622,9 @@ versions:
 - `DownloadEntry`
 - `DownloadVersion`
 - `DownloadFile`
-- `SourceCandidate`
+- `DownloadLink`
 
-这样后续无论页面渲染、API 输出还是下载解析，都走同一套数据结构。
+这样后续无论页面渲染还是 API 输出，都走同一套数据结构。
 
 ### 9.4 评论与认证数据模型
 
@@ -620,9 +632,12 @@ versions:
 
 - `users`
   - `id`
-  - `email`
-  - `password_hash`
+  - `provider`（`github` / `telegram`）
+  - `provider_user_id`
   - `display_name`
+  - `username`
+  - `avatar_url`
+  - `email`（可空）
   - `role`
   - `status`
   - `created_at`
@@ -666,28 +681,26 @@ versions:
 
 - `GET /api/me`
   - 返回当前登录用户与会话状态
-- `GET /api/search?q=xxx&type=all|articles|downloads`
+- `GET /api/search?q=xxx&type=all|articles|downloads&page=1&pageSize=20`
   - 返回站内搜索结果
 - `GET /api/downloads`
   - 返回下载列表摘要
 - `GET /api/downloads/:slug`
   - 返回下载详情
-- `GET /api/downloads/:slug/sources?fileId=xxx`
-  - 返回该文件的全部已启用来源
-- `GET /api/downloads/:slug/resolve?fileId=xxx`（可选）
-  - 返回默认下载按钮目标，或直接 302 跳转
+- `GET /api/downloads/:slug/links?fileId=xxx`
+  - 返回该文件的全部已启用下载链接
 - `GET /api/comments?articleSlug=xxx`
   - 返回指定文章的已公开评论
 - `POST /api/comments`
   - 提交评论，要求登录态与 Turnstile token
-- `DELETE /api/comments/:id`
-  - 删除当前用户自己的评论
 - `POST /api/comments/:id/report`
   - 举报评论
-- `POST /api/auth/register`
-  - 使用邮箱/密码注册账号，要求 Turnstile token
-- `POST /api/auth/login`
-  - 使用邮箱/密码登录账号，要求 Turnstile token
+- `GET /api/auth/github/start`
+  - 跳转到 GitHub OAuth 授权页
+- `GET /api/auth/github/callback`
+  - 处理 GitHub OAuth 回调并建立会话
+- `POST /api/auth/telegram/verify`
+  - 校验 Telegram 登录载荷并建立会话
 - `POST /api/auth/logout`
   - 退出登录
 
@@ -699,6 +712,8 @@ versions:
   - 获取待审核评论列表
 - `POST /api/admin/comments/:id/moderate`
   - 执行通过、拒绝、标记垃圾评论等操作
+- `DELETE /api/admin/comments/:id`
+  - 删除指定评论
 - `POST /api/admin/users/:id/ban`
   - 封禁指定用户评论权限
 
@@ -707,26 +722,25 @@ versions:
 - 在 `Cloudflare Workers` 模式下，上述 API 应作为正式能力启用
 - 在本地部署模式下，上述 API 应作为完整能力的一部分启用
 
-### 10.3 下载来源组装逻辑
+### 10.3 下载链接组装逻辑
 
-`sources` 接口基本流程：
+`links` 接口基本流程：
 
 1. 根据 `slug + fileId` 找到目标文件
-2. 收集该文件的全部已启用来源
-3. 过滤无效、缺失配置或当前部署模式不可用的来源
+2. 收集该文件的全部已启用下载链接
+3. 过滤无效、缺失配置或当前部署模式不可用的链接
 4. 按配置的 `order` 字段排序
-5. 返回完整来源列表给页面直接展示
-6. 如调用 `resolve` 接口，则取排序后的第一条来源作为默认下载目标
+5. 返回完整链接列表给页面直接展示
 
 ### 10.4 评论与认证逻辑
 
 评论与认证接口的最低处理流程：
 
-1. 注册、登录、评论提交时接收 Turnstile token
-2. 服务端调用 Cloudflare 官方校验接口验证 token
-3. 注册与登录流程使用邮箱/密码，并签发站内会话
-4. 密码必须使用安全哈希算法存储，例如 `Argon2id`、`scrypt` 或等效方案
-5. 会话应定义明确有效期，并支持服务端主动失效
+1. GitHub 登录流程必须校验 OAuth `state`，并在回调后建立站内会话
+2. Telegram 登录流程必须校验 Telegram 登录载荷签名，并在校验通过后建立站内会话
+3. 会话应定义明确有效期，并支持服务端主动失效
+4. 评论提交时接收 Turnstile token
+5. 服务端调用 Cloudflare 官方校验接口验证 token
 6. 对认证接口和评论接口执行频率限制
 7. 未登录用户拒绝发表评论
 8. 评论写入前执行黑名单词检测，以及基础重复内容/高频外链拦截
@@ -764,13 +778,13 @@ lib/
 其中：
 
 - `content/downloads` 用于维护下载元数据
-- `server/services/downloads` 用于实现不同来源的适配器
+- `server/services/downloads` 用于实现不同下载链接类型的适配器
 - `server/services/search` 或 `lib/search` 用于统一文章与下载搜索索引
 - `components/download` 用于下载页专用展示组件
 
 说明：
 
-- `server/` 中的下载解析逻辑不再是可有可无的附属物，而是两种主部署模式都应正式承载的核心模块
+- `server/` 中的下载条目与评论认证逻辑是两种主部署模式都应正式承载的核心模块
 
 ## 12. 前端页面要求
 
@@ -806,7 +820,7 @@ lib/
 - 文件列表
 - 平台信息
 - 文件大小
-- 全部来源列表与默认下载按钮
+- 下载链接列表
 - 安装说明或关联文章
 
 下载详情页不应做成普通博客详情页的样子，而应该更偏工具页或发布页。
@@ -827,11 +841,12 @@ lib/
 ## 14. 安全与风控
 
 - 本地文件绝对路径不得暴露到前端。
-- 下载来源组装接口应校验 `slug` 和 `fileId`，防止路径拼接漏洞。
+- 下载链接组装接口应校验 `slug` 和 `fileId`，防止路径拼接漏洞。
 - GitHub API Token、R2 Key、WebDAV 凭据、评论系统密钥必须通过环境变量管理。
 - 第一阶段下载链接不要求防盗链或短时签名。
 - 若未来引入后台能力，需补充认证与审计设计。
-- 评论注册、登录、提交接口必须在服务端校验 Turnstile。
+- GitHub OAuth 回调必须校验 `state`，Telegram 登录必须校验签名载荷。
+- 评论提交接口必须在服务端校验 Turnstile。
 - 评论接口应有 IP、用户、文章维度的频率限制。
 - 评论接口应优先结合 Cloudflare WAF / Rate Limiting 规则做外围防刷。
 - 评论内容提交前应执行黑名单词检测与基础重复内容检查。
@@ -842,16 +857,17 @@ lib/
 
 - 首页与文章页首屏尽量静态输出
 - 评论区客户端懒加载
-- 下载源列表可在客户端按需请求
+- 下载链接列表可在客户端按需请求
 - 图片支持优化与响应式尺寸
 - 列表页需要控制首屏条目数，避免内容过重
+- 搜索结果页应支持分页加载或页码切换
 
 ## 16. 可观测性
 
 建议在第一阶段至少记录：
 
 - 下载按钮点击次数
-- 各来源点击分布
+- 各下载链接点击分布
 - 搜索请求次数与无结果次数
 - 404 内容访问情况
 - 评论组件加载错误
@@ -862,7 +878,7 @@ lib/
 
 在两种主部署模式下，都建议记录：
 
-- 下载来源组装失败次数
+- 下载链接组装失败次数
 - 评论审核通过率
 - 评论接口频率限制命中次数
 - 登录失败次数
@@ -891,7 +907,7 @@ lib/
 ### Phase 2：Workers 评论与认证系统
 
 - 建立 `D1` schema：用户、会话、评论、审核记录
-- 完成邮箱/密码注册、登录、退出登录接口
+- 完成 `GitHub OAuth` 与 `Telegram Login` 登录、会话、退出登录接口
 - 接入 `Cloudflare Turnstile`
 - 完成评论提交、举报、审核基础流程
 - 完成评论接口的频率限制、黑名单词与基础反垃圾策略
@@ -905,8 +921,8 @@ lib/
 - 下载数据模型
 - 下载列表与详情页
 - 站内搜索
-- `R2`、`GitHub Repo`、`OSS`、`WebDAV` 下载源适配
-- 下载来源直接展示与点击统计
+- `R2`、`GitHub Repo`、`OSS`、`WebDAV` 下载链接适配
+- 下载链接直接展示与点击统计
 - 站点稳定部署到 `Cloudflare Workers`
 
 ### Phase 4：本地部署能力
@@ -915,7 +931,7 @@ lib/
 - 复用评论与认证接口
 - 优先复用 `D1` 对应 schema 到 `SQLite`
 - 接入 `local` 单机目录文件源
-- 校验 `local + R2 + GitHub + OSS + WebDAV` 统一展示逻辑
+- 校验 `local + R2 + GitHub + OSS + WebDAV` 统一链接展示逻辑
 - 落实 `SQLite` 备份与恢复流程
 
 ### Phase 5：体验完善
@@ -929,9 +945,10 @@ lib/
 
 - 框架：`Nuxt 4 + Nuxt Content`
 - 评论：自建评论系统，必须登录后评论
-- 登录方式：`邮箱/密码`
+- 登录方式：`GitHub OAuth + Telegram Login`
 - 评论风控：`Cloudflare Turnstile` + 频率限制 + 黑名单词 + 审核状态
 - 评论存储：Workers 阶段用 `Cloudflare D1`，本地部署阶段优先用 `SQLite`
+- 首期不做：邮箱/密码、找回密码、重置密码
 - 站内搜索：第一阶段必做
 - 下载主源：`R2`
 - GitHub 来源：优先 `GitHub Repo`
@@ -940,7 +957,7 @@ lib/
 - 第二主部署模式：`本地部署（Node/Nitro）`
 - 开发顺序：先完成 `Cloudflare Workers` 模式，再在其抽象基础上扩展本地部署模式
 - 本地部署文件主来源：`单机目录`
-- 下载展示策略：直接展示全部已启用来源，不做容灾或自动切换
+- 下载展示策略：直接展示全部已启用下载链接，不做镜像切换、容灾或自动切换
 - 下载安全策略：第一阶段不做防盗链或短时签名
 - 部署协同策略：Workers 与本地部署之间不要求自动同步到 `R2`
 - 内容管理：先走 Git 工作流，后续按需要接 `Nuxt Studio`
@@ -954,19 +971,20 @@ lib/
 ### 20.1 Workers 阶段成功标准
 
 - 维护者可以通过 Markdown 发布文章与下载条目
-- 站内搜索可用，且覆盖文章与下载条目
+- 站内搜索可用，覆盖文章与下载条目，且搜索结果支持分页
 - 访客可以在文章页查看评论
 - 只有已登录用户才能发表评论
-- 评论注册、登录、评论提交流程包含邮箱/密码、Turnstile 与服务端校验
+- 评论登录与评论提交流程包含 `GitHub` / `Telegram` 第三方登录、Turnstile 与服务端校验
 - 评论系统具备黑名单词、频率限制、审核状态等基础反垃圾能力
-- Workers 模式下，一个下载文件可以直接展示全部已配置来源，且首期至少支持 `R2` 与 `GitHub Repo`
-- 如配置 `OSS` 或 `WebDAV`，下载页可以一并正确展示
+- 评论只能由管理员删除
+- Workers 模式下，一个下载文件可以直接展示全部已配置下载链接，且首期至少支持 `R2` 与 `GitHub Repo`
+- 如配置 `OSS` 或 `WebDAV`，下载页可以一并正确展示对应下载链接
 - 页面样式可以不受默认模板限制进行二改
 - 站点可以稳定部署到 `Cloudflare Workers`
 
 ### 20.2 全部双模式成功标准
 
 - 在满足 Workers 阶段成功标准的前提下，站点可以稳定部署到本地 `Node/Nitro` 环境
-- 本地部署模式下，一个下载文件可以直接读取单机目录，并聚合 `local + R2 + GitHub + OSS + WebDAV`
+- 本地部署模式下，一个下载文件可以直接读取单机目录，并展示 `local + R2 + GitHub + OSS + WebDAV` 下载链接
 - Workers 与本地部署可以复用同一套核心内容结构、评论接口与下载抽象
 - 不依赖自动同步到 `R2` 也能完成两种模式的正常运行
