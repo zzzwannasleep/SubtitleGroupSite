@@ -4,11 +4,8 @@ import { formatDate } from '~/utils/format'
 const route = useRoute()
 
 const { data: download } = await useAsyncData(`download-${route.params.slug}`, async () => {
-  const item = await queryCollection('downloads').where('slug', '=', route.params.slug as string).first()
-  if (!item || item.status !== 'active') {
-    throw createError({ statusCode: 404, statusMessage: 'Download not found' })
-  }
-  return item
+  const response = await $fetch(`/api/downloads/${route.params.slug}`)
+  return response.data
 })
 
 const { data: article } = await useAsyncData(`download-article-${route.params.slug}`, async () => {
@@ -88,4 +85,3 @@ useSeoMeta({
     </div>
   </article>
 </template>
-

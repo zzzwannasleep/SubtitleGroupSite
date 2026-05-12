@@ -1,6 +1,5 @@
 import { createError, getQuery, getRouterParam } from 'h3'
-import { getContentManifest } from '~/server/utils/content-data'
-import { resolveOrderedLinks } from '~/utils/downloads'
+import { findActiveDownload, findDownloadFile, serializePublicDownloadLinks } from '~/server/utils/downloads'
 
 export default defineEventHandler((event) => {
   const slug = getRouterParam(event, 'slug')
@@ -14,7 +13,7 @@ export default defineEventHandler((event) => {
     })
   }
 
-  const download = getContentManifest().downloads.find((item) => item.slug === slug && item.status === 'active')
+  const download = findActiveDownload(slug)
 
   if (!download) {
     throw createError({
@@ -23,7 +22,7 @@ export default defineEventHandler((event) => {
     })
   }
 
-  const file = download.versions.flatMap((version) => version.files).find((entry) => entry.id === fileId)
+  const file = findDownloadFile(download, fileId)
 
   if (!file) {
     throw createError({
@@ -37,7 +36,7 @@ export default defineEventHandler((event) => {
     data: {
       slug,
       fileId,
-      items: resolveOrderedLinks(file.links),
+      items: serializePublicDownloadLinks(slug, fileId, file.links),
     },
   }
 })

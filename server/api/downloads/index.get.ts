@@ -1,25 +1,20 @@
-import { getContentManifest } from '~/server/utils/content-data'
+import { getQuery } from 'h3'
+import { listDownloadSummaries } from '~/server/utils/downloads'
 
-export default defineEventHandler(() => {
-  const items = getContentManifest().downloads
-    .filter((item) => item.status === 'active')
-    .map((item) => ({
-      title: item.title,
-      slug: item.slug,
-      summary: item.summary,
-      category: item.category,
-      tags: item.tags,
-      publishedAt: item.publishedAt,
-      updatedAt: item.updatedAt,
-      versions: item.versions.map((version) => version.version),
-      url: item.url,
-    }))
+export default defineEventHandler((event) => {
+  const query = getQuery(event)
+  const tag = typeof query.tag === 'string' ? query.tag.trim() : ''
+  const slugs = typeof query.slugs === 'string'
+    ? query.slugs.split(',').map((value) => value.trim()).filter(Boolean)
+    : []
 
   return {
     ok: true,
     data: {
-      items,
+      items: listDownloadSummaries({
+        tag,
+        slugs,
+      }),
     },
   }
 })
-

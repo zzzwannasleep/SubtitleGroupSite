@@ -17,6 +17,14 @@
       "database_id": "replace-with-d1-database-id"
     }
   ],
+  "secrets": {
+    "required": [
+      "AUTH_SESSION_SECRET",
+      "TURNSTILE_SECRET_KEY",
+      "GITHUB_OAUTH_CLIENT_SECRET",
+      "TELEGRAM_BOT_TOKEN"
+    ]
+  },
   "vars": {
     "DEPLOY_MODE": "workers"
   }

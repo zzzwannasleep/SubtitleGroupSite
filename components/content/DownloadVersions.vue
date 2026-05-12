@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { formatBytes } from '~/utils/format'
-import { resolveOrderedLinks } from '~/utils/downloads'
 
 defineProps<{
   versions: Array<{
@@ -12,7 +11,13 @@ defineProps<{
       platform: string
       size: number
       arch?: string | null
-      links: Array<any>
+      links: Array<{
+        id: string
+        type: string
+        label: string
+        order: number
+        href: string
+      }>
     }>
   }>
 }>()
@@ -49,14 +54,14 @@ defineProps<{
                 </p>
               </div>
               <p class="brand-mono text-xs font-semibold uppercase tabular-nums text-[color:var(--sgs-muted)]">
-                {{ resolveOrderedLinks(file.links).length }} sources
+                {{ file.links.length }} sources
               </p>
             </div>
 
             <div class="grid gap-px border border-[var(--sgs-line-strong)] bg-[color:var(--sgs-line-strong)]">
               <div
-                v-for="link in resolveOrderedLinks(file.links)"
-                :key="`${file.id}-${link.label}-${link.order}`"
+                v-for="link in file.links"
+                :key="`${file.id}-${link.id}`"
                 class="grid gap-3 bg-[color:var(--sgs-panel)] px-4 py-3 md:grid-cols-[180px_1fr_auto] md:items-center"
               >
                 <p class="brand-mono text-xs font-semibold uppercase tabular-nums text-[color:var(--sgs-muted)]">
@@ -64,20 +69,13 @@ defineProps<{
                 </p>
                 <p class="text-sm font-semibold text-pretty">{{ link.label }}</p>
                 <a
-                  v-if="link.href"
                   :href="link.href"
                   target="_blank"
                   rel="noreferrer"
                   class="text-sm font-bold uppercase text-[color:var(--sgs-accent)] hover:text-[color:var(--sgs-ink)]"
                 >
-                  直接下载
+                  鐩存帴涓嬭浇
                 </a>
-                <span
-                  v-else
-                  class="text-sm font-bold uppercase text-[color:var(--sgs-muted)]"
-                >
-                  本地模式待接入
-                </span>
               </div>
             </div>
           </article>
@@ -86,4 +84,3 @@ defineProps<{
     </FramePanel>
   </div>
 </template>
-

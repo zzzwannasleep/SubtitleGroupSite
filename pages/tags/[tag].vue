@@ -3,12 +3,19 @@ const route = useRoute()
 const tag = computed(() => route.params.tag as string)
 
 const { data } = await useAsyncData(`tag-${tag.value}`, async () => {
-  const [articles, downloads] = await Promise.all([
+  const [articles, downloadsResponse] = await Promise.all([
     queryCollection('articles').where('draft', '=', false).where('tags', 'LIKE', `%${tag.value}%`).all(),
-    queryCollection('downloads').where('status', '=', 'active').where('tags', 'LIKE', `%${tag.value}%`).all(),
+    $fetch('/api/downloads', {
+      query: {
+        tag: tag.value,
+      },
+    }),
   ])
 
-  return { articles, downloads }
+  return {
+    articles,
+    downloads: downloadsResponse.data.items,
+  }
 })
 
 useSeoMeta({
@@ -37,4 +44,3 @@ useSeoMeta({
     </div>
   </section>
 </template>
-

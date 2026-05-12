@@ -1,5 +1,11 @@
 # Issue Breakdown
 
+## Current Status Snapshot
+
+- `[done]` ISSUE-001, ISSUE-002, ISSUE-003, ISSUE-004, ISSUE-005, ISSUE-006
+- `[done]` ISSUE-009, ISSUE-010, ISSUE-011, ISSUE-012, ISSUE-013, ISSUE-014, ISSUE-015, ISSUE-016, ISSUE-017, ISSUE-018, ISSUE-019
+- `[review]` ISSUE-007, ISSUE-008
+
 ## 1. 目的
 
 本文件把 `IMPLEMENTATION-PLAN.md` 继续下钻成可直接创建 issue 的任务卡。
@@ -36,7 +42,7 @@
 
 ## 4. Epic A：项目骨架与内容基础
 
-### ISSUE-001 `infra`
+### ISSUE-001 `infra` `[done]`
 
 标题：
 
@@ -69,7 +75,7 @@
 
 - 不要求业务数据可用
 
-### ISSUE-002 `content`
+### ISSUE-002 `content` `[done]`
 
 标题：
 
@@ -98,7 +104,7 @@
 
 - 不要求搜索或页面展示完成
 
-### ISSUE-003 `content`
+### ISSUE-003 `content` `[done]`
 
 标题：
 
@@ -129,7 +135,7 @@
 
 ## 5. Epic B：搜索
 
-### ISSUE-004 `search`
+### ISSUE-004 `search` `[done]`
 
 标题：
 
@@ -154,7 +160,7 @@
 - 下载字段可被提取
 - `draft` 内容不进入公开索引
 
-### ISSUE-005 `search`
+### ISSUE-005 `search` `[done]`
 
 标题：
 
@@ -180,7 +186,7 @@
 - 支持 `page` 与 `pageSize`
 - 结果排序符合 `SEARCH-SPEC.md`
 
-### ISSUE-006 `search-ui`
+### ISSUE-006 `search-ui` `[done]`
 
 标题：
 
@@ -213,7 +219,7 @@
 
 ## 6. Epic C：认证与会话
 
-### ISSUE-007 `auth`
+### ISSUE-007 `auth` `[review]`
 
 标题：
 
@@ -238,7 +244,7 @@
 - 可完成 GitHub 登录
 - 无效 `state` 被拒绝
 
-### ISSUE-008 `auth`
+### ISSUE-008 `auth` `[review]`
 
 标题：
 
@@ -262,7 +268,7 @@
 - 可完成 Telegram 登录
 - 无效签名被拒绝
 
-### ISSUE-009 `auth`
+### ISSUE-009 `auth` `[done]`
 
 标题：
 
@@ -292,7 +298,7 @@
 
 ## 7. Epic D：评论与审核
 
-### ISSUE-010 `comment`
+### ISSUE-010 `comment` `[done]`
 
 标题：
 
@@ -318,7 +324,7 @@
 - 登录用户可评论
 - 未审核评论不公开
 
-### ISSUE-011 `comment`
+### ISSUE-011 `comment` `[done]`
 
 标题：
 
@@ -347,7 +353,7 @@
 - 管理员可以删除评论
 - 管理员可以封禁用户评论权限
 
-### ISSUE-012 `comment-ui`
+### ISSUE-012 `comment-ui` `[done]`
 
 标题：
 
@@ -376,7 +382,7 @@
 
 ## 8. Epic E：下载中心
 
-### ISSUE-013 `download`
+### ISSUE-013 `download` `[done]`
 
 标题：
 
@@ -401,7 +407,7 @@
 - 能按 schema 渲染
 - 能正确区分版本和文件
 
-### ISSUE-014 `download`
+### ISSUE-014 `download` `[done]`
 
 标题：
 
@@ -427,7 +433,7 @@
 - Workers 模式能正确过滤 `local`
 - 返回顺序符合 `order`
 
-### ISSUE-015 `download`
+### ISSUE-015 `download` `[done]`
 
 标题：
 
@@ -451,7 +457,7 @@
 
 ## 9. Epic F：部署与运维
 
-### ISSUE-016 `ops`
+### ISSUE-016 `ops` `[done]`
 
 标题：
 
@@ -478,7 +484,7 @@
 - 环境变量齐全
 - 部署链路可复现
 
-### ISSUE-017 `ops`
+### ISSUE-017 `ops` `[done]`
 
 标题：
 
@@ -504,7 +510,7 @@
 
 ## 10. Epic G：本地部署第二阶段
 
-### ISSUE-018 `local`
+### ISSUE-018 `local` `[done]`
 
 标题：
 
@@ -529,7 +535,7 @@
 - 本地模式可运行
 - 评论与会话逻辑可复用
 
-### ISSUE-019 `local`
+### ISSUE-019 `local` `[done]`
 
 标题：
 

@@ -99,6 +99,21 @@ const SCHEMA_STATEMENTS = [
     )
   `,
   'CREATE INDEX IF NOT EXISTS comment_logs_comment_idx ON comment_moderation_logs(comment_id, created_at)',
+  `
+    CREATE TABLE IF NOT EXISTS download_clicks (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      download_slug TEXT NOT NULL,
+      file_id TEXT NOT NULL,
+      link_index INTEGER NOT NULL,
+      link_type TEXT NOT NULL,
+      link_label TEXT NOT NULL,
+      target_url TEXT,
+      created_at TEXT NOT NULL,
+      ip_hash TEXT,
+      user_agent TEXT
+    )
+  `,
+  'CREATE INDEX IF NOT EXISTS download_clicks_distribution_idx ON download_clicks(download_slug, file_id, link_index, created_at)',
 ]
 
 const localKey = {}

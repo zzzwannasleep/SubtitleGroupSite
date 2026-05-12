@@ -1,4 +1,21 @@
 # Implementation Plan
+ 
+## Current Status Snapshot
+ 
+- `[done]` Slice 1, Slice 2, Slice 3, Slice 5
+- `[review]` Slice 4
+  - Auth/session code is in place and local session/comment flow is verified.
+  - Real GitHub/Telegram provider callback flow was not re-run with live third-party credentials in this pass.
+- `[done]` Slice 6
+  - Download pages, tracked link access, and click stats are implemented.
+  - Workers mode filters `local`, and local mode serves `local` files without exposing raw paths.
+- `[done]` Slice 8
+  - Local `SQLite` auth/comment/session path is working.
+  - Local directory download support is implemented and verified.
+- `[in_progress]` Slice 7
+  - Workers deploy / D1 backup restore runbooks are documented.
+  - Download click stats are implemented.
+  - Search request stats and comment failure stats are still not instrumented in this pass.
 
 ## 1. 目标
 

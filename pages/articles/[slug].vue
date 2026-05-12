@@ -16,10 +16,13 @@ const { data: relatedDownloads } = await useAsyncData(`article-related-${route.p
     return []
   }
 
-  return queryCollection('downloads')
-    .where('slug', 'IN', article.value.relatedDownloads)
-    .where('status', '=', 'active')
-    .all()
+  const response = await $fetch('/api/downloads', {
+    query: {
+      slugs: article.value.relatedDownloads.join(','),
+    },
+  })
+
+  return response.data.items
 })
 
 useSeoMeta({

@@ -1,11 +1,11 @@
-import { getRouterParam, createError } from 'h3'
-import { getContentManifest } from '~/server/utils/content-data'
+import { createError, getRouterParam } from 'h3'
+import { serializeDownloadDetail } from '~/server/utils/downloads'
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   const slug = getRouterParam(event, 'slug')
-  const item = getContentManifest().downloads.find((entry) => entry.slug === slug && entry.status === 'active')
+  const item = await queryCollection(event, 'downloads').where('slug', '=', slug as string).first()
 
-  if (!item) {
+  if (!item || item.status !== 'active') {
     throw createError({
       statusCode: 404,
       statusMessage: 'Download not found',
@@ -14,7 +14,6 @@ export default defineEventHandler((event) => {
 
   return {
     ok: true,
-    data: item,
+    data: serializeDownloadDetail(item),
   }
 })
-

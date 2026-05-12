@@ -2,14 +2,14 @@
 import { formatCount } from '~/utils/format'
 
 const { data } = await useAsyncData('home-shell', async () => {
-  const [articles, downloads] = await Promise.all([
+  const [articles, downloadsResponse] = await Promise.all([
     queryCollection('articles').where('draft', '=', false).order('publishedAt', 'DESC').all(),
-    queryCollection('downloads').where('status', '=', 'active').order('publishedAt', 'DESC').all(),
+    $fetch('/api/downloads'),
   ])
 
   return {
     articles,
-    downloads,
+    downloads: downloadsResponse.data.items,
   }
 })
 
@@ -104,4 +104,3 @@ useSeoMeta({
     </div>
   </section>
 </template>
-

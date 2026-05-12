@@ -30,6 +30,10 @@ versions:
             label: R2 Copy
             url: https://downloads.example.com/subtitle-assistant-cli/0.8.0/subtitle-assistant-cli-0.8.0.tgz
             order: 95
+          - type: local
+            label: Local Mirror
+            path: subtitle-assistant-cli/0.8.0/subtitle-assistant-cli-0.8.0.tgz
+            order: 110
 ---
 
 ## 使用场景

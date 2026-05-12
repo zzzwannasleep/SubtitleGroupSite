@@ -40,6 +40,7 @@ export default defineNuxtConfig({
     githubToken: process.env.GITHUB_TOKEN,
     webdavUsername: process.env.WEBDAV_USERNAME,
     webdavPassword: process.env.WEBDAV_PASSWORD,
+    localStorageRoot: process.env.LOCAL_STORAGE_ROOT || '',
     public: {
       siteBaseUrl: process.env.SITE_BASE_URL || 'http://127.0.0.1:3000',
       deployMode: process.env.DEPLOY_MODE || 'local',

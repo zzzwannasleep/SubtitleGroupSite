@@ -10,6 +10,7 @@
     "build": "npm run build:local",
     "build:local": "cross-env DEPLOY_MODE=local NITRO_PRESET=node_server nuxt build",
     "build:workers": "cross-env DEPLOY_MODE=workers NITRO_PRESET=cloudflare_module nuxt build",
+    "verify:downloads": "node scripts/verify-download-flows.mjs",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "predev": "npm run sync:content",

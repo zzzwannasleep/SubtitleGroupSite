@@ -1,7 +1,8 @@
 <script setup lang="ts">
-const { data: downloads } = await useAsyncData('downloads-list', () =>
-  queryCollection('downloads').where('status', '=', 'active').order('publishedAt', 'DESC').all(),
-)
+const { data: downloads } = await useAsyncData('downloads-list', async () => {
+  const response = await $fetch('/api/downloads')
+  return response.data.items
+})
 
 useSeoMeta({
   title: '下载',
@@ -22,4 +23,3 @@ useSeoMeta({
     </div>
   </section>
 </template>
-

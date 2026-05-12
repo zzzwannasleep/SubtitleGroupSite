@@ -1,5 +1,5 @@
 import { mkdir, readFile, writeFile, readdir } from 'node:fs/promises'
-import { extname, join, resolve, relative } from 'node:path'
+import { extname, isAbsolute, join, resolve, relative } from 'node:path'
 import matter from 'gray-matter'
 
 const root = process.cwd()
@@ -167,6 +167,11 @@ function validateDownload(entry) {
 
         if (link.type === 'local') {
           ensure(typeof link.path === 'string' && link.path.trim(), `${entry.relativePath}: local path is required`)
+          ensure(!isAbsolute(link.path), `${entry.relativePath}: local path must be relative`)
+          ensure(
+            !link.path.replace(/\\/g, '/').split('/').some((segment) => segment === '..'),
+            `${entry.relativePath}: local path must not escape LOCAL_STORAGE_ROOT`,
+          )
         }
 
         return link
@@ -323,4 +328,3 @@ main().catch((error) => {
   console.error(error.message)
   process.exitCode = 1
 })
-
