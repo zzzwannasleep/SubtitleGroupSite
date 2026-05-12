@@ -1,0 +1,32 @@
+{
+  "name": "subtitle-group-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "cross-env DEPLOY_MODE=local nuxt dev",
+    "dev:workers": "cross-env DEPLOY_MODE=workers nuxt dev --port 8787",
+    "sync:content": "node scripts/build-content-artifacts.mjs",
+    "validate:content": "node scripts/build-content-artifacts.mjs --validate-only",
+    "build": "npm run build:local",
+    "build:local": "cross-env DEPLOY_MODE=local NITRO_PRESET=node_server nuxt build",
+    "build:workers": "cross-env DEPLOY_MODE=workers NITRO_PRESET=cloudflare_module nuxt build",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "predev": "npm run sync:content",
+    "prebuild:local": "npm run sync:content",
+    "prebuild:workers": "npm run sync:content"
+  },
+  "dependencies": {
+    "@nuxt/content": "^3.2.0",
+    "@tailwindcss/vite": "^4.1.11",
+    "better-sqlite3": "^12.2.0",
+    "clsx": "^2.1.1",
+    "gray-matter": "^4.0.3",
+    "nuxt": "^4.0.3",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^4.1.11"
+  },
+  "devDependencies": {
+    "cross-env": "^10.0.0"
+  }
+}

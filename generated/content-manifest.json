@@ -1,0 +1,250 @@
+{
+  "generatedAt": "2026-05-12T14:41:46.198Z",
+  "articles": [
+    {
+      "title": "Building A Two-Mode Delivery Chain",
+      "slug": "building-a-two-mode-delivery-chain",
+      "summary": "把 Workers 公网站点与本地部署目录直读分开建模，能减少实现时的大量隐藏复杂度。",
+      "publishedAt": "2026-04-21",
+      "updatedAt": null,
+      "draft": false,
+      "category": "architecture",
+      "tags": [
+        "architecture",
+        "downloads",
+        "local"
+      ],
+      "cover": null,
+      "authors": [],
+      "relatedDownloads": [
+        "subtitle-assistant-cli"
+      ],
+      "url": "/articles/building-a-two-mode-delivery-chain"
+    },
+    {
+      "title": "Release Orchestration Field Notes",
+      "slug": "field-notes-on-release-orchestration",
+      "summary": "记录一个字幕组发布链路如何从手工接力切换到可追踪、可搜索、可复用的内容站与下载站协同面。",
+      "publishedAt": "2026-05-01",
+      "updatedAt": "2026-05-10",
+      "draft": false,
+      "category": "operations",
+      "tags": [
+        "release",
+        "workflow",
+        "workers"
+      ],
+      "cover": null,
+      "authors": [],
+      "relatedDownloads": [
+        "subtitle-group-pack"
+      ],
+      "url": "/articles/field-notes-on-release-orchestration"
+    },
+    {
+      "title": "Turnstile Before Talk",
+      "slug": "turnstile-before-talk",
+      "summary": "评论系统先锁登录态、验证码和审核状态，再谈 UI 体验，否则很快会被垃圾内容吞没。",
+      "publishedAt": "2026-05-08",
+      "updatedAt": null,
+      "draft": true,
+      "category": "moderation",
+      "tags": [
+        "comments",
+        "moderation",
+        "security"
+      ],
+      "cover": null,
+      "authors": [],
+      "relatedDownloads": [],
+      "url": "/articles/turnstile-before-talk"
+    }
+  ],
+  "downloads": [
+    {
+      "title": "Subtitle Assistant CLI",
+      "slug": "subtitle-assistant-cli",
+      "summary": "面向维护者的命令行工具样例，用于批量生成版本清单、校验内容结构和同步发布记录。",
+      "publishedAt": "2026-04-22",
+      "updatedAt": null,
+      "status": "active",
+      "category": "tooling",
+      "tags": [
+        "cli",
+        "tooling",
+        "automation"
+      ],
+      "cover": null,
+      "articleSlug": "building-a-two-mode-delivery-chain",
+      "versions": [
+        {
+          "version": "0.8.0",
+          "label": "Preview Build",
+          "files": [
+            {
+              "id": "universal-package",
+              "name": "subtitle-assistant-cli-0.8.0.tgz",
+              "platform": "universal",
+              "size": 1864320,
+              "arch": null,
+              "links": [
+                {
+                  "type": "github_repo",
+                  "label": "GitHub Package",
+                  "owner": "subtitle-group",
+                  "repo": "tools",
+                  "ref": "main",
+                  "path": "releases/subtitle-assistant-cli-0.8.0.tgz",
+                  "order": 80
+                },
+                {
+                  "type": "r2",
+                  "label": "R2 Copy",
+                  "url": "https://downloads.example.com/subtitle-assistant-cli/0.8.0/subtitle-assistant-cli-0.8.0.tgz",
+                  "order": 95
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "url": "/downloads/subtitle-assistant-cli"
+    },
+    {
+      "title": "Subtitle Group Release Pack",
+      "slug": "subtitle-group-pack",
+      "summary": "面向字幕组主发布链路的打包样例，覆盖 Windows、macOS 和 Linux 三个平台安装件。",
+      "publishedAt": "2026-05-02",
+      "updatedAt": "2026-05-10",
+      "status": "active",
+      "category": "release",
+      "tags": [
+        "release",
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "cover": null,
+      "articleSlug": "field-notes-on-release-orchestration",
+      "versions": [
+        {
+          "version": "2.4.1",
+          "label": "Stable Channel",
+          "files": [
+            {
+              "id": "win-x64-installer",
+              "name": "subtitle-group-pack-2.4.1-win-x64.exe",
+              "platform": "windows",
+              "size": 81264640,
+              "arch": "x64",
+              "links": [
+                {
+                  "type": "r2",
+                  "label": "R2 Primary",
+                  "url": "https://downloads.example.com/subtitle-group-pack/2.4.1/subtitle-group-pack-2.4.1-win-x64.exe",
+                  "order": 90
+                },
+                {
+                  "type": "github_repo",
+                  "label": "GitHub Mirror",
+                  "owner": "subtitle-group",
+                  "repo": "release-artifacts",
+                  "ref": "main",
+                  "path": "subtitle-group-pack/2.4.1/subtitle-group-pack-2.4.1-win-x64.exe",
+                  "order": 70
+                }
+              ]
+            },
+            {
+              "id": "macos-universal",
+              "name": "subtitle-group-pack-2.4.1-macos-universal.dmg",
+              "platform": "macos",
+              "size": 92340224,
+              "arch": "universal",
+              "links": [
+                {
+                  "type": "r2",
+                  "label": "R2 Primary",
+                  "url": "https://downloads.example.com/subtitle-group-pack/2.4.1/subtitle-group-pack-2.4.1-macos-universal.dmg",
+                  "order": 90
+                },
+                {
+                  "type": "webdav",
+                  "label": "WebDAV Backup",
+                  "url": "https://dav.example.com/public/subtitle-group-pack/2.4.1/subtitle-group-pack-2.4.1-macos-universal.dmg",
+                  "order": 60
+                }
+              ]
+            },
+            {
+              "id": "linux-x64-tarball",
+              "name": "subtitle-group-pack-2.4.1-linux-x64.tar.gz",
+              "platform": "linux",
+              "size": 67502080,
+              "arch": "x64",
+              "links": [
+                {
+                  "type": "r2",
+                  "label": "R2 Primary",
+                  "url": "https://downloads.example.com/subtitle-group-pack/2.4.1/subtitle-group-pack-2.4.1-linux-x64.tar.gz",
+                  "order": 90
+                },
+                {
+                  "type": "oss",
+                  "label": "OSS Backup",
+                  "url": "https://oss.example.com/subtitle-group-pack/2.4.1/subtitle-group-pack-2.4.1-linux-x64.tar.gz",
+                  "order": 65
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "version": "2.3.0",
+          "label": "Previous Stable",
+          "files": [
+            {
+              "id": "win-x64-installer-prev",
+              "name": "subtitle-group-pack-2.3.0-win-x64.exe",
+              "platform": "windows",
+              "size": 78433485,
+              "arch": "x64",
+              "links": [
+                {
+                  "type": "github_repo",
+                  "label": "GitHub Archive",
+                  "owner": "subtitle-group",
+                  "repo": "release-artifacts",
+                  "ref": "main",
+                  "path": "subtitle-group-pack/2.3.0/subtitle-group-pack-2.3.0-win-x64.exe",
+                  "order": 75
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "url": "/downloads/subtitle-group-pack"
+    }
+  ],
+  "pages": [
+    {
+      "title": "About The Project",
+      "slug": "about",
+      "summary": "说明这个项目的目标边界、首期重点和为什么要把内容站与下载中心一起设计。",
+      "publishedAt": "2026-05-12",
+      "updatedAt": null,
+      "url": "/about"
+    }
+  ],
+  "changelog": [
+    {
+      "title": "Foundation Cut",
+      "slug": "2026-05-12-foundation-cut",
+      "summary": "首次提交项目骨架、内容结构、搜索协议与前台页面骨架。",
+      "publishedAt": "2026-05-12",
+      "updatedAt": null,
+      "url": "/changelog"
+    }
+  ]
+}

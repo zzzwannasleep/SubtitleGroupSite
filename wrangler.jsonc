@@ -1,0 +1,23 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "subtitle-group-site",
+  "main": ".output/server/index.mjs",
+  "compatibility_date": "2026-05-12",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "no_nodejs_compat_v2"
+  ],
+  "assets": {
+    "directory": ".output/public"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "subtitle-group-site",
+      "database_id": "replace-with-d1-database-id"
+    }
+  ],
+  "vars": {
+    "DEPLOY_MODE": "workers"
+  }
+}

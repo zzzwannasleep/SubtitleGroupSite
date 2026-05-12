@@ -1,0 +1,78 @@
+{
+  "generatedAt": "2026-05-12T14:41:46.198Z",
+  "items": [
+    {
+      "kind": "article",
+      "title": "Building A Two-Mode Delivery Chain",
+      "slug": "building-a-two-mode-delivery-chain",
+      "summary": "把 Workers 公网站点与本地部署目录直读分开建模，能减少实现时的大量隐藏复杂度。",
+      "tags": [
+        "architecture",
+        "downloads",
+        "local"
+      ],
+      "url": "/articles/building-a-two-mode-delivery-chain",
+      "publishedAt": "2026-04-21",
+      "updatedAt": null
+    },
+    {
+      "kind": "article",
+      "title": "Release Orchestration Field Notes",
+      "slug": "field-notes-on-release-orchestration",
+      "summary": "记录一个字幕组发布链路如何从手工接力切换到可追踪、可搜索、可复用的内容站与下载站协同面。",
+      "tags": [
+        "release",
+        "workflow",
+        "workers"
+      ],
+      "url": "/articles/field-notes-on-release-orchestration",
+      "publishedAt": "2026-05-01",
+      "updatedAt": "2026-05-10"
+    },
+    {
+      "kind": "download",
+      "title": "Subtitle Assistant CLI",
+      "slug": "subtitle-assistant-cli",
+      "summary": "面向维护者的命令行工具样例，用于批量生成版本清单、校验内容结构和同步发布记录。",
+      "tags": [
+        "cli",
+        "tooling",
+        "automation"
+      ],
+      "url": "/downloads/subtitle-assistant-cli",
+      "publishedAt": "2026-04-22",
+      "updatedAt": null,
+      "matchedVersions": [
+        "0.8.0"
+      ],
+      "matchedFiles": [
+        "subtitle-assistant-cli-0.8.0.tgz"
+      ]
+    },
+    {
+      "kind": "download",
+      "title": "Subtitle Group Release Pack",
+      "slug": "subtitle-group-pack",
+      "summary": "面向字幕组主发布链路的打包样例，覆盖 Windows、macOS 和 Linux 三个平台安装件。",
+      "tags": [
+        "release",
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "url": "/downloads/subtitle-group-pack",
+      "publishedAt": "2026-05-02",
+      "updatedAt": "2026-05-10",
+      "matchedVersions": [
+        "2.4.1",
+        "2.3.0"
+      ],
+      "matchedFiles": [
+        "subtitle-group-pack-2.4.1-win-x64.exe",
+        "subtitle-group-pack-2.4.1-macos-universal.dmg",
+        "subtitle-group-pack-2.4.1-linux-x64.tar.gz",
+        "subtitle-group-pack-2.3.0-win-x64.exe"
+      ]
+    }
+  ]
+}
