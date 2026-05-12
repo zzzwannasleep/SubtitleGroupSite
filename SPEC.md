@@ -1000,3 +1000,11 @@ lib/
   - 细化文章与下载条目的 frontmatter、文件结构、下载链接字段与校验规则
 - `specs/SEARCH-SPEC.md`
   - 细化站内搜索索引来源、排序规则、分页协议、API 与前端行为
+- `specs/IMPLEMENTATION-PLAN.md`
+  - 细化首期开发拆分、依赖顺序、阶段完成标准与交付边界
+- `specs/API-CHECKLIST.md`
+  - 细化接口实现检查项、统一约定、错误码、权限与测试点
+- `specs/ISSUE-BREAKDOWN.md`
+  - 细化可直接创建 issue 的任务卡、负责人类型、依赖和验收项
+- `specs/ENV-SETUP.md`
+  - 细化 Workers 与本地部署两种模式下的环境变量模板、存放位置和使用约束
