@@ -1,6 +1,7 @@
 import type { H3Event } from 'h3'
 import { getRequestHeader } from 'h3'
 import type { ApiErrorCode } from '~/server/utils/api'
+import type { SessionUser } from '~/server/utils/auth'
 import { getCurrentUser } from '~/server/utils/auth'
 import { getContentManifest } from '~/server/utils/content-data'
 import { normalizeIndexText, normalizeTextBlock } from '~/server/utils/crypto'
@@ -136,8 +137,15 @@ export async function listPublicComments(event: H3Event, articleSlug: string, pa
   }
 }
 
-export async function createComment(event: H3Event, articleSlug: string, body: string): Promise<CommentMutationResult> {
-  const user = await getCurrentUser(event)
+export async function createComment(
+  event: H3Event,
+  articleSlug: string,
+  body: string,
+  options?: {
+    currentUser?: SessionUser | null
+  },
+): Promise<CommentMutationResult> {
+  const user = options && 'currentUser' in options ? options.currentUser || null : await getCurrentUser(event)
   if (!user) {
     return {
       ok: false,

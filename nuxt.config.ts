@@ -25,7 +25,6 @@ export default defineNuxtConfig({
     port: Number(process.env.NITRO_PORT || 3000),
   },
   routeRules: {
-    '/api/search': { swr: 60 },
     '/api/downloads/**': { swr: 120 },
   },
   runtimeConfig: {

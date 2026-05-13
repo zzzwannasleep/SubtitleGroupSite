@@ -12,10 +12,10 @@
 - `[done]` Slice 8
   - Local `SQLite` auth/comment/session path is working.
   - Local directory download support is implemented and verified.
-- `[in_progress]` Slice 7
+- `[done]` Slice 7
   - Workers deploy / D1 backup restore runbooks are documented.
-  - Download click stats are implemented.
-  - Search request stats and comment failure stats are still not instrumented in this pass.
+  - Download click stats, search request stats, and comment failure stats are implemented.
+  - Admin observability surface is available at `/admin/operations`.
 
 ## 1. 目标
 

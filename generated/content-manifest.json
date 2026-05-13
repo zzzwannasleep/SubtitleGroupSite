@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-12T15:17:16.348Z",
+  "generatedAt": "2026-05-13T05:38:10.619Z",
   "articles": [
     {
       "title": "Building A Two-Mode Delivery Chain",
@@ -249,6 +249,14 @@
       "slug": "2026-05-12-foundation-cut",
       "summary": "首次提交项目骨架、内容结构、搜索协议与前台页面骨架。",
       "publishedAt": "2026-05-12",
+      "updatedAt": null,
+      "url": "/changelog"
+    },
+    {
+      "title": "Observability Cut",
+      "slug": "2026-05-13-observability-cut",
+      "summary": "Added search request telemetry, comment failure diagnostics, and an admin operations board that closes the first-pass observability slice.",
+      "publishedAt": "2026-05-13",
       "updatedAt": null,
       "url": "/changelog"
     }

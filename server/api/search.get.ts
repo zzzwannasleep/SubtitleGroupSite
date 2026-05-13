@@ -1,5 +1,6 @@
 import { getQuery } from 'h3'
 import { getSearchIndex } from '~/server/utils/content-data'
+import { recordSearchRequest } from '~/server/utils/observability'
 
 type SearchItem = {
   kind: 'article' | 'download'
@@ -66,7 +67,7 @@ function scoreItem(item: SearchItem, rawQuery: string) {
   }
 }
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   const query = getQuery(event)
   const q = typeof query.q === 'string' ? query.q.trim() : ''
   const type = query.type === 'articles' || query.type === 'downloads' ? query.type : 'all'
@@ -118,7 +119,8 @@ export default defineEventHandler((event) => {
   const safePage = totalPages > 0 ? Math.min(page, totalPages) : 1
   const start = (safePage - 1) * pageSize
 
-  return {
+  const safeItems = filtered.slice(start, start + pageSize).map(({ score, ...item }) => item)
+  const response = {
     ok: true,
     data: {
       q,
@@ -127,8 +129,19 @@ export default defineEventHandler((event) => {
       pageSize,
       total,
       totalPages,
-      items: filtered.slice(start, start + pageSize).map(({ score, ...item }) => item),
+      items: safeItems,
     },
   }
-})
 
+  await recordSearchRequest(event, {
+    queryText: q,
+    searchType: type,
+    page: total === 0 ? 1 : safePage,
+    pageSize,
+    totalResults: total,
+    totalPages,
+    returnedItems: safeItems.length,
+  })
+
+  return response
+})

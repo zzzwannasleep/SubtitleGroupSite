@@ -114,6 +114,41 @@ const SCHEMA_STATEMENTS = [
     )
   `,
   'CREATE INDEX IF NOT EXISTS download_clicks_distribution_idx ON download_clicks(download_slug, file_id, link_index, created_at)',
+  `
+    CREATE TABLE IF NOT EXISTS search_requests (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      query_text TEXT NOT NULL,
+      query_norm TEXT NOT NULL,
+      search_type TEXT NOT NULL,
+      page INTEGER NOT NULL,
+      page_size INTEGER NOT NULL,
+      total_results INTEGER NOT NULL,
+      total_pages INTEGER NOT NULL,
+      returned_items INTEGER NOT NULL,
+      created_at TEXT NOT NULL,
+      ip_hash TEXT,
+      user_agent TEXT
+    )
+  `,
+  'CREATE INDEX IF NOT EXISTS search_requests_created_idx ON search_requests(created_at)',
+  'CREATE INDEX IF NOT EXISTS search_requests_query_idx ON search_requests(query_norm, search_type, created_at)',
+  `
+    CREATE TABLE IF NOT EXISTS comment_failures (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      article_slug TEXT,
+      user_id INTEGER,
+      error_code TEXT NOT NULL,
+      error_message TEXT NOT NULL,
+      authenticated INTEGER NOT NULL DEFAULT 0,
+      created_at TEXT NOT NULL,
+      ip_hash TEXT,
+      user_agent TEXT,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+    )
+  `,
+  'CREATE INDEX IF NOT EXISTS comment_failures_created_idx ON comment_failures(created_at)',
+  'CREATE INDEX IF NOT EXISTS comment_failures_code_idx ON comment_failures(error_code, created_at)',
+  'CREATE INDEX IF NOT EXISTS comment_failures_article_idx ON comment_failures(article_slug, created_at)',
 ]
 
 const localKey = {}

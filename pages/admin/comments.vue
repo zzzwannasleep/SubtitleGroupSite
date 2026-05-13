@@ -147,6 +147,8 @@ useSeoMeta({
     </FramePanel>
 
     <template v-else>
+      <AdminNav />
+
       <div class="grid gap-px border border-[var(--sgs-line-strong)] bg-[color:var(--sgs-line-strong)] md:grid-cols-5">
         <NuxtLink
           v-for="entry in ['pending', 'approved', 'rejected', 'spam', 'all']"

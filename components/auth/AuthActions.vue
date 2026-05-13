@@ -84,6 +84,13 @@ async function logout() {
           >
             Review Desk
           </NuxtLink>
+          <NuxtLink
+            v-if="isAdmin"
+            to="/admin/operations"
+            class="border border-[var(--sgs-line-strong)] px-3 py-2 text-sm font-semibold uppercase hover:bg-[color:var(--sgs-accent-soft)]"
+          >
+            Ops Board
+          </NuxtLink>
           <button
             type="button"
             class="border border-[var(--sgs-line-strong)] px-3 py-2 text-sm font-semibold uppercase hover:bg-[color:var(--sgs-accent-soft)] disabled:cursor-not-allowed disabled:opacity-60"
